@@ -17,6 +17,6 @@ It's a graphql service for Dapp developer. Make it easy to query the onchain(Vec
 - __Support querying a special contract data__
   - Generate the code of the models with the contract （Tool）
   - Generate the querying code for the models （Tool）
-  - Deplay the querying code （Tool）
+  - Deploy the querying code （Tool）
 - __Support querying complex relationship contracts data__
   - Upgrade the above tools for the feature
