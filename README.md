@@ -1,22 +1,24 @@
 # QueryLib
-It's a graphql service for Dapp developer. Make it easy to query the onchain(Vechain) data.
 
+QueryLib is a powerful GraphQL service specifically designed for DApp developers, offering seamless querying of on-chain (VeChain) data.
 
-## Project Target
+## Project Objectives
 - __Centralized Service__
-  - Expanding regular node interfaces
-  - Support querying a special contract data
-  - Support querying complex relationship contracts data
+  - Expanding regular node interfaces.
+  - Supporting queries for specific contract data.
+  - Supporting queries for complex relationship contract data.
 
-- __Make it as a L2 Service__
+- __Transforming into an L2 Service__
 
 ## TODO List
 - __Expanding regular node interfaces__
-  - Sync the data to database
-  - Implement and expanding the node interfaces
-- __Support querying a special contract data__
-  - Generate the code of the models with the contract （Tool）
-  - Generate the querying code for the models （Tool）
-  - Deploy the querying code （Tool）
-- __Support querying complex relationship contracts data__
-  - Upgrade the above tools for the feature
+  - Synchronizing data to the database.
+  - Implementing and expanding node interfaces.
+
+- __Supporting queries for specific contract data__
+  - Generating code models for the contract (Tool).
+  - Generating querying code for the models (Tool).
+  - Deploying the querying code (Tool).
+
+- __Supporting queries for complex relationship contract data__
+  - Upgrading the above-mentioned tools for this feature: Upgrading the tools developed for supporting specific contract data queries, enhancing their capabilities to handle complex relationships between multiple contracts.
