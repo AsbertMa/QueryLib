@@ -1,7 +1,6 @@
 # QueryLib
-## Make it easy to query the onchain(Vechain) data
+It's a graphql service for Dapp developer. Make it easy to query the onchain(Vechain) data.
 
-It's a graphql service for Dapp developer.
 
 ## Project Target
 - __Centralized Service__
