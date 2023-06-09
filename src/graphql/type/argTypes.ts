@@ -1,4 +1,4 @@
-import { inputObjectType } from 'nexus'
+import { inputObjectType, enumType } from 'nexus'
 
 export const EventCriteria = inputObjectType({
   name: 'EventCriteria',
@@ -19,4 +19,9 @@ export const TransferCriteria = inputObjectType({
     t.nullable.string('sender')
     t.nullable.string('recipient')
   },
+})
+
+export const Order = enumType({
+  name: 'Order',
+  members: ['desc', 'asc']
 })
