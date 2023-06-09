@@ -30,6 +30,7 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  Order: "asc" | "desc"
 }
 
 export interface NexusGenScalars {
@@ -59,6 +60,10 @@ export interface NexusGenObjects {
     totalScore: number; // Int!
     txsFeatures: number; // Int!
     txsRoot: string; // String!
+  }
+  Blocks: { // root type
+    count: number; // Int!
+    list: Array<NexusGenRootTypes['Block'] | null>; // [Block]!
   }
   Clause: { // root type
     data?: string | null; // String
@@ -103,20 +108,7 @@ export interface NexusGenObjects {
     txIndex: string; // ID!
     txOrigin: string; // String!
   }
-  Transfer: { // root type
-    amount: string; // String!
-    recipient: string; // String!
-    sender: string; // String!
-  }
-  TransferLogs: { // root type
-    count: number; // Int!
-  }
-  TrasnferLog: { // root type
-    amount: string; // String!
-    recipient: string; // String!
-    sender: string; // String!
-  }
-  Tx: { // root type
+  Transaction: { // root type
     blockID: string; // String!
     blockRef: string; // String!
     chainTag: number; // Int!
@@ -129,6 +121,23 @@ export interface NexusGenObjects {
     nonce: string; // String!
     origin: string; // String!
     size: number; // Int!
+  }
+  Transactions: { // root type
+    count: number; // Int!
+    list: Array<NexusGenRootTypes['Transaction'] | null>; // [Transaction]!
+  }
+  Transfer: { // root type
+    amount: string; // String!
+    recipient: string; // String!
+    sender: string; // String!
+  }
+  TransferLogs: { // root type
+    count: number; // Int!
+  }
+  TrasnferLog: { // root type
+    amount: string; // String!
+    recipient: string; // String!
+    sender: string; // String!
   }
   TxMeta: { // root type
     blockID: string; // String!
@@ -145,13 +154,13 @@ export interface NexusGenUnions {
 
 export type NexusGenRootTypes = NexusGenObjects
 
-export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
+export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
   Block: { // field return type
     beneficiary: string; // String!
     com: boolean; // Boolean!
-    expendTxs: NexusGenRootTypes['Tx'][]; // [Tx!]!
+    expendTxs: NexusGenRootTypes['Transaction'][]; // [Transaction!]!
     gasLimit: number; // Int!
     gasUsed: number; // Int!
     id: string; // String!
@@ -168,6 +177,10 @@ export interface NexusGenFieldTypes {
     transactions: string[]; // [String!]!
     txsFeatures: number; // Int!
     txsRoot: string; // String!
+  }
+  Blocks: { // field return type
+    count: number; // Int!
+    list: Array<NexusGenRootTypes['Block'] | null>; // [Block]!
   }
   Clause: { // field return type
     data: string | null; // String
@@ -205,10 +218,12 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     block: NexusGenRootTypes['Block'] | null; // Block
+    blocks: NexusGenRootTypes['Blocks'] | null; // Blocks
     events: NexusGenRootTypes['EventLogs']; // EventLogs!
     receipt: NexusGenRootTypes['Receipt'] | null; // Receipt
+    transaction: NexusGenRootTypes['Transaction'] | null; // Transaction
+    transactions: NexusGenRootTypes['Transactions']; // Transactions!
     transfers: NexusGenRootTypes['TransferLogs']; // TransferLogs!
-    tx: NexusGenRootTypes['Tx'] | null; // Tx
   }
   Receipt: { // field return type
     gasPayer: string; // String!
@@ -227,22 +242,7 @@ export interface NexusGenFieldTypes {
     txIndex: string; // ID!
     txOrigin: string; // String!
   }
-  Transfer: { // field return type
-    amount: string; // String!
-    recipient: string; // String!
-    sender: string; // String!
-  }
-  TransferLogs: { // field return type
-    count: number; // Int!
-    logs: NexusGenRootTypes['TrasnferLog'][]; // [TrasnferLog!]!
-  }
-  TrasnferLog: { // field return type
-    amount: string; // String!
-    meta: NexusGenRootTypes['LogMeta']; // LogMeta!
-    recipient: string; // String!
-    sender: string; // String!
-  }
-  Tx: { // field return type
+  Transaction: { // field return type
     blockID: string; // String!
     blockRef: string; // String!
     chainTag: number; // Int!
@@ -259,6 +259,25 @@ export interface NexusGenFieldTypes {
     receipt: NexusGenRootTypes['Receipt'] | null; // Receipt
     size: number; // Int!
   }
+  Transactions: { // field return type
+    count: number; // Int!
+    list: Array<NexusGenRootTypes['Transaction'] | null>; // [Transaction]!
+  }
+  Transfer: { // field return type
+    amount: string; // String!
+    recipient: string; // String!
+    sender: string; // String!
+  }
+  TransferLogs: { // field return type
+    count: number; // Int!
+    logs: NexusGenRootTypes['TrasnferLog'][]; // [TrasnferLog!]!
+  }
+  TrasnferLog: { // field return type
+    amount: string; // String!
+    meta: NexusGenRootTypes['LogMeta']; // LogMeta!
+    recipient: string; // String!
+    sender: string; // String!
+  }
   TxMeta: { // field return type
     blockID: string; // String!
     blockNumber: number; // Int!
@@ -270,7 +289,7 @@ export interface NexusGenFieldTypeNames {
   Block: { // field return type name
     beneficiary: 'String'
     com: 'Boolean'
-    expendTxs: 'Tx'
+    expendTxs: 'Transaction'
     gasLimit: 'Int'
     gasUsed: 'Int'
     id: 'String'
@@ -287,6 +306,10 @@ export interface NexusGenFieldTypeNames {
     transactions: 'String'
     txsFeatures: 'Int'
     txsRoot: 'String'
+  }
+  Blocks: { // field return type name
+    count: 'Int'
+    list: 'Block'
   }
   Clause: { // field return type name
     data: 'String'
@@ -324,10 +347,12 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     block: 'Block'
+    blocks: 'Blocks'
     events: 'EventLogs'
     receipt: 'Receipt'
+    transaction: 'Transaction'
+    transactions: 'Transactions'
     transfers: 'TransferLogs'
-    tx: 'Tx'
   }
   Receipt: { // field return type name
     gasPayer: 'String'
@@ -346,22 +371,7 @@ export interface NexusGenFieldTypeNames {
     txIndex: 'ID'
     txOrigin: 'String'
   }
-  Transfer: { // field return type name
-    amount: 'String'
-    recipient: 'String'
-    sender: 'String'
-  }
-  TransferLogs: { // field return type name
-    count: 'Int'
-    logs: 'TrasnferLog'
-  }
-  TrasnferLog: { // field return type name
-    amount: 'String'
-    meta: 'LogMeta'
-    recipient: 'String'
-    sender: 'String'
-  }
-  Tx: { // field return type name
+  Transaction: { // field return type name
     blockID: 'String'
     blockRef: 'String'
     chainTag: 'Int'
@@ -378,6 +388,25 @@ export interface NexusGenFieldTypeNames {
     receipt: 'Receipt'
     size: 'Int'
   }
+  Transactions: { // field return type name
+    count: 'Int'
+    list: 'Transaction'
+  }
+  Transfer: { // field return type name
+    amount: 'String'
+    recipient: 'String'
+    sender: 'String'
+  }
+  TransferLogs: { // field return type name
+    count: 'Int'
+    logs: 'TrasnferLog'
+  }
+  TrasnferLog: { // field return type name
+    amount: 'String'
+    meta: 'LogMeta'
+    recipient: 'String'
+    sender: 'String'
+  }
   TxMeta: { // field return type name
     blockID: 'String'
     blockNumber: 'Int'
@@ -390,21 +419,35 @@ export interface NexusGenArgTypes {
     block: { // args
       id: string; // String!
     }
+    blocks: { // args
+      order: NexusGenEnums['Order'] | null; // Order
+      signer?: string | null; // String
+      skip?: number | null; // Int
+      take: number | null; // Int
+    }
     events: { // args
       criterias?: Array<NexusGenInputs['EventCriteria'] | null> | null; // [EventCriteria]
+      order: NexusGenEnums['Order'] | null; // Order
       skip?: number | null; // Int
-      take?: number | null; // Int
+      take: number | null; // Int
     }
     receipt: { // args
       id: string; // String!
     }
+    transaction: { // args
+      id: string; // String!
+    }
+    transactions: { // args
+      order: NexusGenEnums['Order'] | null; // Order
+      origin?: string | null; // String
+      skip?: number | null; // Int
+      take: number | null; // Int
+    }
     transfers: { // args
       criterias?: Array<NexusGenInputs['TransferCriteria'] | null> | null; // [TransferCriteria]
+      order: NexusGenEnums['Order'] | null; // Order
       skip?: number | null; // Int
-      take?: number | null; // Int
-    }
-    tx: { // args
-      id: string; // String!
+      take: number | null; // Int
     }
   }
 }
@@ -419,7 +462,7 @@ export type NexusGenObjectNames = keyof NexusGenObjects;
 
 export type NexusGenInputNames = keyof NexusGenInputs;
 
-export type NexusGenEnumNames = never;
+export type NexusGenEnumNames = keyof NexusGenEnums;
 
 export type NexusGenInterfaceNames = never;
 

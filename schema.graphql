@@ -5,7 +5,7 @@
 type Block {
   beneficiary: String!
   com: Boolean!
-  expendTxs: [Tx!]!
+  expendTxs: [Transaction!]!
   gasLimit: Int!
   gasUsed: Int!
   id: String!
@@ -22,6 +22,11 @@ type Block {
   transactions: [String!]!
   txsFeatures: Int!
   txsRoot: String!
+}
+
+type Blocks {
+  count: Int!
+  list: [Block]!
 }
 
 type Clause {
@@ -67,6 +72,11 @@ type LogMeta {
   txOrigin: String!
 }
 
+enum Order {
+  asc
+  desc
+}
+
 type Outputs {
   contractAddress: String
   events: [Event!]!
@@ -75,10 +85,12 @@ type Outputs {
 
 type Query {
   block(id: String!): Block
-  events(criterias: [EventCriteria], skip: Int, take: Int): EventLogs!
+  blocks(order: Order = asc, signer: String, skip: Int, take: Int = 10): Blocks
+  events(criterias: [EventCriteria], order: Order = asc, skip: Int, take: Int = 10): EventLogs!
   receipt(id: String!): Receipt
-  transfers(criterias: [TransferCriteria], skip: Int, take: Int): TransferLogs!
-  tx(id: String!): Tx
+  transaction(id: String!): Transaction
+  transactions(order: Order = asc, origin: String, skip: Int, take: Int = 10): Transactions!
+  transfers(criterias: [TransferCriteria], order: Order = asc, skip: Int, take: Int = 10): TransferLogs!
 }
 
 type Receipt {
@@ -98,6 +110,29 @@ type ReceiptMeta {
   txID: String!
   txIndex: ID!
   txOrigin: String!
+}
+
+type Transaction {
+  blockID: String!
+  blockRef: String!
+  chainTag: Int!
+  clauses: [Clause!]!
+  delegator: String
+  dependsOn: String
+  expiration: Int!
+  gas: Int!
+  gasPriceCoef: Int!
+  id: String!
+  meta: TxMeta!
+  nonce: String!
+  origin: String!
+  receipt: Receipt
+  size: Int!
+}
+
+type Transactions {
+  count: Int!
+  list: [Transaction]!
 }
 
 type Transfer {
@@ -122,24 +157,6 @@ type TrasnferLog {
   meta: LogMeta!
   recipient: String!
   sender: String!
-}
-
-type Tx {
-  blockID: String!
-  blockRef: String!
-  chainTag: Int!
-  clauses: [Clause!]!
-  delegator: String
-  dependsOn: String
-  expiration: Int!
-  gas: Int!
-  gasPriceCoef: Int!
-  id: String!
-  meta: TxMeta!
-  nonce: String!
-  origin: String!
-  receipt: Receipt
-  size: Int!
 }
 
 type TxMeta {
