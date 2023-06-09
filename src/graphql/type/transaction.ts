@@ -1,7 +1,7 @@
 import { objectType } from 'nexus'
 
 export const Tx = objectType({
-  name: 'Tx',
+  name: 'Transaction',
   definition(t) {
     t.nonNull.int('chainTag')
     t.nonNull.string('id')
@@ -66,4 +66,14 @@ export const Tx = objectType({
       }
     })
   }
+})
+
+export const TxList = objectType({
+  name: 'Transactions',
+  definition(t) {
+    t.nonNull.int('count'),
+    t.nonNull.list.field('list', {
+      type: 'Transaction'
+    })
+  },
 })
