@@ -1,4 +1,5 @@
-import { extendType, nullable, list, intArg } from "nexus"
+import { extendType, nullable, list, intArg, arg } from "nexus"
+import { Order } from "../type"
 
 export const transfers = extendType({
   type: 'Query',
@@ -7,11 +8,17 @@ export const transfers = extendType({
       type: 'TransferLogs',
       args: {
         criterias: nullable(list('TransferCriteria')),
+        order: arg({
+          type: Order,
+          default: 'asc'
+        }),
         skip: intArg(),
-        take: intArg(),
+        take: intArg({
+          default: 10
+        }),
       },
       async resolve(source, args, ctx) {
-        const { criterias, skip, take } = args
+        const { criterias, skip, take, order } = args
         const queryObj = criterias?.map(c => {
           let result: Record<string, string> = {}
           c?.txOrigin && (result['txOrigin'] = c.txOrigin)
@@ -54,6 +61,9 @@ export const transfers = extendType({
                 }
               }
             }
+          },
+          orderBy: {
+            createAt: order
           },
           take,
           skip

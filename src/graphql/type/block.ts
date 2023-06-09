@@ -21,7 +21,7 @@ export const Block = objectType({
     t.nonNull.boolean('isTrunk')
     t.nonNull.boolean('isFinalized')
     t.nonNull.list.nonNull.field('expendTxs', {
-      type: 'Tx',
+      type: 'Transaction',
       resolve(block) {
         return block.txs
       }
@@ -34,6 +34,16 @@ export const Block = objectType({
         })
 
       }
+    })
+  },
+})
+
+export const Blocks = objectType({
+  name: 'Blocks',
+  definition(t) {
+    t.nonNull.int('count'),
+    t.nonNull.list.field('list', {
+      type: 'Block'
     })
   },
 })

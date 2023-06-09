@@ -1,4 +1,5 @@
-import { extendType, nullable, stringArg, list, intArg } from "nexus"
+import { extendType, nullable, arg, list, intArg } from "nexus"
+import { Order } from "../type"
 
 export const events = extendType({
   type: 'Query',
@@ -7,11 +8,17 @@ export const events = extendType({
       type: 'EventLogs',
       args: {
         criterias: nullable(list('EventCriteria')),
+        order: arg({
+          type: Order,
+          default: 'asc'
+        }),
         skip: intArg(),
-        take: intArg()
+        take: intArg({
+          default: 10
+        })
       },
       async resolve(parent, args, ctx) {
-        const { criterias, skip, take } = args
+        const { criterias, skip, take, order } = args
         const queryObj = criterias?.map(c => {
           let result: Record<string, string> = {}
 
@@ -60,6 +67,9 @@ export const events = extendType({
                 }
               }
             }
+          },
+          orderBy: {
+            createdAt: order
           },
           skip,
           take

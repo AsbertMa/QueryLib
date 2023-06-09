@@ -1,4 +1,4 @@
-export * from './tx'
+export * from './transaction'
 export * from './block'
 export * from './event'
 export * from './receipt'

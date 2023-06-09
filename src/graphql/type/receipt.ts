@@ -26,17 +26,6 @@ export const Receipt = objectType({
       type: 'Outputs',
       async resolve(tx, _, ctx) {
         return tx.clauses
-        // const txID = tx.id
-        // return await ctx.prisma.clause.findMany({
-        //   where: {
-        //     txID: txID
-        //   },
-        //   include: {
-        //     events: [],
-        //     contractCreate: true,
-        //     transfers: []
-        //   }
-        // })
       }
     })
   },
