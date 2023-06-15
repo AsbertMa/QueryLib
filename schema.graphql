@@ -85,18 +85,18 @@ type Outputs {
 
 type Query {
   block(id: String!): Block
-  blocks(order: Order = ASC, signer: String, skip: Int, take: Int = 10): Blocks
-  events(criterias: [EventCriteria], order: Order = ASC, skip: Int, take: Int = 10): EventLogs!
+  blocks(order: Order = DESC, range: Range, signer: String, skip: Int, take: Int = 10): Blocks
+  events(criterias: [EventCriteria], order: Order = DESC, range: Range, skip: Int, take: Int = 10): EventLogs!
   receipt(id: String!): Receipt
   transaction(id: String!): Transaction
-  transactions(order: Order = ASC, origin: String, skip: Int, take: Int = 10): Transactions!
-  transfers(criterias: [TransferCriteria], order: Order = ASC, skip: Int, take: Int = 10): TransferLogs!
+  transactions(order: Order = DESC, origin: String, range: Range, skip: Int, take: Int = 10): Transactions!
+  transfers(criterias: [TransferCriteria], order: Order = DESC, range: Range, skip: Int, take: Int = 10): TransferLogs!
 }
 
 input Range {
   from: Int!
   to: Int!
-  unit: Int!
+  unit: Unit!
 }
 
 type Receipt {
@@ -169,4 +169,9 @@ type TxMeta {
   blockID: String!
   blockNumber: Int!
   blockTimestamp: Int!
+}
+
+enum Unit {
+  BLOCK
+  TIME
 }

@@ -25,7 +25,7 @@ export interface NexusGenInputs {
   Range: { // input type
     from: number; // Int!
     to: number; // Int!
-    unit: number; // Int!
+    unit: NexusGenEnums['Unit']; // Unit!
   }
   TransferCriteria: { // input type
     recipient?: string | null; // String
@@ -36,6 +36,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   Order: "asc" | "desc"
+  Unit: "block" | "time"
 }
 
 export interface NexusGenScalars {
@@ -426,6 +427,7 @@ export interface NexusGenArgTypes {
     }
     blocks: { // args
       order: NexusGenEnums['Order'] | null; // Order
+      range?: NexusGenInputs['Range'] | null; // Range
       signer?: string | null; // String
       skip?: number | null; // Int
       take: number | null; // Int
@@ -433,6 +435,7 @@ export interface NexusGenArgTypes {
     events: { // args
       criterias?: Array<NexusGenInputs['EventCriteria'] | null> | null; // [EventCriteria]
       order: NexusGenEnums['Order'] | null; // Order
+      range?: NexusGenInputs['Range'] | null; // Range
       skip?: number | null; // Int
       take: number | null; // Int
     }
@@ -445,12 +448,14 @@ export interface NexusGenArgTypes {
     transactions: { // args
       order: NexusGenEnums['Order'] | null; // Order
       origin?: string | null; // String
+      range?: NexusGenInputs['Range'] | null; // Range
       skip?: number | null; // Int
       take: number | null; // Int
     }
     transfers: { // args
       criterias?: Array<NexusGenInputs['TransferCriteria'] | null> | null; // [TransferCriteria]
       order: NexusGenEnums['Order'] | null; // Order
+      range?: NexusGenInputs['Range'] | null; // Range
       skip?: number | null; // Int
       take: number | null; // Int
     }
