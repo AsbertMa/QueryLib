@@ -9,7 +9,6 @@ export const TrasnferLog = objectType({
     t.nonNull.field('meta', {
       type: 'LogMeta',
       resolve(source) {
-        console.log(source)
         return {
           clauseIndex: source.clause.index,
           blockID: source.clause.tx.block.id,

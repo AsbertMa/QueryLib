@@ -11,7 +11,6 @@ export const Receipt = objectType({
     t.nonNull.field('meta', {
       type: 'ReceiptMeta',
       resolve(infos, _, ctx) {
-        console.log(infos)
         return {
           blockID: infos.blockID,
           blockNumber: infos.block.number,
