@@ -21,7 +21,19 @@ export const TransferCriteria = inputObjectType({
   },
 })
 
+export const Range = inputObjectType({
+  name: "Range",
+  definition(t) {
+    t.nonNull.int('unit')
+    t.nonNull.int('from')
+    t.nonNull.int('to')
+  }
+})
+
 export const Order = enumType({
   name: 'Order',
-  members: ['desc', 'asc']
+  members: {
+    DESC: 'desc',
+    ASC: 'asc'
+  }
 })

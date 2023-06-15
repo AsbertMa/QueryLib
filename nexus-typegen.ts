@@ -22,6 +22,11 @@ export interface NexusGenInputs {
     topic3?: string | null; // String
     topic4?: string | null; // String
   }
+  Range: { // input type
+    from: number; // Int!
+    to: number; // Int!
+    unit: number; // Int!
+  }
   TransferCriteria: { // input type
     recipient?: string | null; // String
     sender?: string | null; // String

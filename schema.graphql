@@ -73,8 +73,8 @@ type LogMeta {
 }
 
 enum Order {
-  asc
-  desc
+  ASC
+  DESC
 }
 
 type Outputs {
@@ -85,12 +85,18 @@ type Outputs {
 
 type Query {
   block(id: String!): Block
-  blocks(order: Order = asc, signer: String, skip: Int, take: Int = 10): Blocks
-  events(criterias: [EventCriteria], order: Order = asc, skip: Int, take: Int = 10): EventLogs!
+  blocks(order: Order = ASC, signer: String, skip: Int, take: Int = 10): Blocks
+  events(criterias: [EventCriteria], order: Order = ASC, skip: Int, take: Int = 10): EventLogs!
   receipt(id: String!): Receipt
   transaction(id: String!): Transaction
-  transactions(order: Order = asc, origin: String, skip: Int, take: Int = 10): Transactions!
-  transfers(criterias: [TransferCriteria], order: Order = asc, skip: Int, take: Int = 10): TransferLogs!
+  transactions(order: Order = ASC, origin: String, skip: Int, take: Int = 10): Transactions!
+  transfers(criterias: [TransferCriteria], order: Order = ASC, skip: Int, take: Int = 10): TransferLogs!
+}
+
+input Range {
+  from: Int!
+  to: Int!
+  unit: Int!
 }
 
 type Receipt {
