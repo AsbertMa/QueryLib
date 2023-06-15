@@ -8,9 +8,12 @@ export const transfers = extendType({
       type: 'TransferLogs',
       args: {
         criterias: nullable(list('TransferCriteria')),
+        range: arg({
+          type: 'Range'
+        }),
         order: arg({
           type: Order,
-          default: 'asc'
+          default: 'desc'
         }),
         skip: intArg(),
         take: intArg({
@@ -18,7 +21,19 @@ export const transfers = extendType({
         }),
       },
       async resolve(source, args, ctx) {
-        const { criterias, skip, take, order } = args
+        const { criterias, skip, take, order, range } = args
+        const rangeFilter = range ? {
+          clause: {
+            tx: {
+              block: {
+                [range.unit === 'block' ? 'number' : 'timestamp']: {
+                  gte: range.from,
+                  lte: range.to
+                }
+              }
+            }
+          }
+        } : null
         const queryObj = criterias?.map(c => {
           let result: Record<string, string> = {}
           c?.txOrigin && (result['txOrigin'] = c.txOrigin)
@@ -30,12 +45,14 @@ export const transfers = extendType({
 
         const count = await ctx.prisma.transfer.count({
           where: {
-            OR: queryObj
+            OR: queryObj,
+            AND: rangeFilter
           }
         })
         const logs = await ctx.prisma.transfer.findMany({
           where: {
-            OR: queryObj
+            OR: queryObj,
+            AND: rangeFilter
           },
           select: {
             sender: true,
@@ -63,7 +80,7 @@ export const transfers = extendType({
             }
           },
           orderBy: {
-            createAt: order
+            createdAt: order
           },
           take,
           skip

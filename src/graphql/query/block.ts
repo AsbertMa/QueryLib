@@ -31,22 +31,33 @@ export const blocks = extendType({
       args: {
         take: intArg({ default: 10 }),
         signer: stringArg(),
+        range: arg({
+          type: 'Range'
+        }),
         skip: intArg(),
         order: arg({
           type: Order,
-          default: 'asc'
+          default: 'desc'
         })
       },
       async resolve (p, args, ctx) {
-        const { take, skip, order, signer } = args
+        const { take, skip, order, signer, range } = args
+        const rangeFilter = range ? {
+          [range.unit === 'block' ? 'number' : 'timestamp']: {
+            gte: range.from,
+            lte: range.to
+          }
+        } : null
         const count = await ctx.prisma.block.count({
           where: {
-            signer
+            signer,
+            AND: rangeFilter
           }
         })
         const list = await ctx.prisma.block.findMany({
           where: {
-            signer
+            signer,
+            AND: rangeFilter
           },
           include:{
             txs: true

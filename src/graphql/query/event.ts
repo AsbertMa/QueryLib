@@ -1,5 +1,5 @@
 import { extendType, nullable, arg, list, intArg } from "nexus"
-import { Order } from "../type"
+import { Order, Range } from "../type"
 
 export const events = extendType({
   type: 'Query',
@@ -10,7 +10,10 @@ export const events = extendType({
         criterias: nullable(list('EventCriteria')),
         order: arg({
           type: Order,
-          default: 'asc'
+          default: 'desc'
+        }),
+        range: arg({
+          type: Range
         }),
         skip: intArg(),
         take: intArg({
@@ -18,7 +21,19 @@ export const events = extendType({
         })
       },
       async resolve(parent, args, ctx) {
-        const { criterias, skip, take, order } = args
+        const { criterias, skip, take, order, range } = args
+        const rangeFilter = range ? {
+          clause: {
+            tx: {
+              block: {
+                [range.unit === 'block' ? 'number' : 'timestamp']: {
+                  gte: range.from,
+                  lte: range.to
+                }
+              }
+            }
+          }
+        } : null
         const queryObj = criterias?.map(c => {
           let result: Record<string, string> = {}
 
@@ -34,12 +49,14 @@ export const events = extendType({
 
         const count = await ctx.prisma.event.count({
           where: {
-            OR: queryObj
+            OR: queryObj,
+            AND: rangeFilter
           }
         })
         const logs = await ctx.prisma.event.findMany({
           where: {
-            OR: queryObj
+            OR: queryObj,
+            AND: rangeFilter
           },
           select: {
             contractAddr: true,

@@ -26,23 +26,36 @@ export const txList = extendType({
       type: 'Transactions',
       args: {
         origin: stringArg(),
+        range: arg({
+          type: 'Range'
+        }),
         order: arg({
           type: 'Order',
-          default: 'asc'
+          default: 'desc'
         }),
         take: intArg({default: 10}),
         skip: intArg()
       },
       async resolve(parent, args, ctx) {
-        const {origin, order, take, skip} = args
+        const {origin, order, take, skip, range} = args
+        const rangeFilter = range ? {
+          block: {
+            [range.unit === 'block' ? 'number' : 'timestamp']: {
+              gte: range.from,
+              lte: range.to
+            }
+          }
+        } : null
         const count = await ctx.prisma.tx.count({
           where: {
-            origin
+            origin,
+            AND: rangeFilter
           }
         })
         const list = await ctx.prisma.tx.findMany({
           where: {
-            origin
+            origin,
+            AND: rangeFilter
           },
           orderBy: {
             createdAt: order

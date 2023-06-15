@@ -21,10 +21,20 @@ export const TransferCriteria = inputObjectType({
   },
 })
 
+export const Unit = enumType({
+  name: 'Unit',
+  members: {
+    BLOCK: 'block',
+    TIME: 'time'
+  }
+})
+
 export const Range = inputObjectType({
   name: "Range",
   definition(t) {
-    t.nonNull.int('unit')
+    t.nonNull.field('unit', {
+      type: Unit
+    })
     t.nonNull.int('from')
     t.nonNull.int('to')
   }
