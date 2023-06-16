@@ -28,7 +28,7 @@ export const Block = objectType({
     })
     t.nonNull.list.nonNull.field('transactions', {
       type: 'String',
-      resolve(block, _, ctx) {
+      resolve(block) {
         return block.txs.map(t => {
           return t.id
         })

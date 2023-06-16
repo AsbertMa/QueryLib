@@ -1,4 +1,5 @@
 import { arg, extendType, intArg, nonNull, stringArg } from "nexus"
+import {getBlockNum} from '../../utils'
 import { Order } from "../type"
 export const blockById = extendType({
   type: 'Query',
@@ -8,16 +9,27 @@ export const blockById = extendType({
       args: {
         id: nonNull(stringArg())
       },
-      resolve(parent, args, ctx) {
+      async resolve(parent, args, ctx) {
         const { id } = args
-        return ctx.prisma.block.findUnique({
+        const finalized = await ctx.prisma.status.findUnique({
           where: {
-            id
+            key: 'finalized'
+          }
+        })
+        const finalizedNum = getBlockNum(finalized?.value!)
+        const theB = await ctx.prisma.block.findUnique({
+          where: {
+            id,
           },
           include: {
             txs: true
           }
         })
+
+        return {
+          ...theB,
+          isFinalized: theB?.number! < finalizedNum
+        }
       }
     })
   }
@@ -40,26 +52,33 @@ export const blocks = extendType({
           default: 'desc'
         })
       },
-      async resolve (p, args, ctx) {
+      async resolve(p, args, ctx) {
         const { take, skip, order, signer, range } = args
         const rangeFilter = range ? {
           [range.unit === 'block' ? 'number' : 'timestamp']: {
             gte: range.from,
             lte: range.to
           }
-        } : null
+        } : undefined
         const count = await ctx.prisma.block.count({
           where: {
             signer,
             AND: rangeFilter
           }
         })
+
+        const finalized = await ctx.prisma.status.findUnique({
+          where: {
+            key: 'finalized'
+          }
+        })
+        const finalizedNum = getBlockNum(finalized?.value!)
         const list = await ctx.prisma.block.findMany({
           where: {
             signer,
             AND: rangeFilter
           },
-          include:{
+          include: {
             txs: true
           },
           orderBy: {
@@ -71,7 +90,12 @@ export const blocks = extendType({
 
         return {
           count,
-          list
+          list: list.map((b) => {
+            return {
+              ...b,
+              isFinalized: b?.number! < finalizedNum
+            }
+          })
         }
       }
     })

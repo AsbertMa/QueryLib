@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model status {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  key       String?  @db.VarChar(255) @unique
+  value     String?  @db.VarChar(255)
+}
+
 model block {
   id           String   @id @db.VarChar(255)
   number       Int?
@@ -14,7 +20,7 @@ model block {
   txs          tx[]
   gasLimit     Int?
   gasUsed      Int?
-  isFinalized  Boolean?
+  com          Boolean?
   isTrunk      Boolean?
   parentID     String?  @db.VarChar(255)
   receiptsRoot String?  @db.VarChar(255)
