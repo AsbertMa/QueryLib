@@ -22,9 +22,20 @@ export const blockById = extendType({
             id,
           },
           include: {
-            txs: true
+            txs: {
+              include: {
+                clauses: {
+                  include: {
+                    transfers: true,
+                    events: true,
+                    contractCreate: true
+                  }
+                },
+              }
+            }
           }
         })
+        console.log(JSON.stringify(theB))
 
         return {
           ...theB,
@@ -79,7 +90,17 @@ export const blocks = extendType({
             AND: rangeFilter
           },
           include: {
-            txs: true
+            txs: {
+              include: {
+                clauses: {
+                  include: {
+                    transfers: true,
+                    events: true,
+                    contractCreate: true
+                  }
+                },
+              }
+            }
           },
           orderBy: {
             number: order

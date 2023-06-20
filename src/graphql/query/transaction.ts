@@ -45,7 +45,7 @@ export const txList = extendType({
               lte: range.to
             }
           }
-        } : null
+        } : undefined
         const count = await ctx.prisma.tx.count({
           where: {
             origin,

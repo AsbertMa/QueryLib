@@ -33,7 +33,7 @@ export const events = extendType({
               }
             }
           }
-        } : null
+        } : undefined
         const queryObj = criterias?.map(c => {
           let result: Record<string, string> = {}
 

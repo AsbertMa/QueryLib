@@ -33,7 +33,7 @@ export const transfers = extendType({
               }
             }
           }
-        } : null
+        } : undefined
         const queryObj = criterias?.map(c => {
           let result: Record<string, string> = {}
           c?.txOrigin && (result['txOrigin'] = c.txOrigin)
