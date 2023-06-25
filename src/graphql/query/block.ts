@@ -19,7 +19,7 @@ export const blockById = extendType({
         const finalizedNum = getBlockNum(finalized?.value!)
         const theB = await ctx.prisma.block.findUnique({
           where: {
-            id,
+            id
           },
           include: {
             txs: {
@@ -74,6 +74,7 @@ export const blocks = extendType({
         const count = await ctx.prisma.block.count({
           where: {
             signer,
+            isTrunk: true,
             AND: rangeFilter
           }
         })
@@ -87,6 +88,7 @@ export const blocks = extendType({
         const list = await ctx.prisma.block.findMany({
           where: {
             signer,
+            isTrunk: true,
             AND: rangeFilter
           },
           include: {

@@ -49,12 +49,18 @@ export const txList = extendType({
         const count = await ctx.prisma.tx.count({
           where: {
             origin,
+            block: {
+              isTrunk: true
+            },
             AND: rangeFilter
           }
         })
         const list = await ctx.prisma.tx.findMany({
           where: {
             origin,
+            block: {
+              isTrunk: true
+            },
             AND: rangeFilter
           },
           orderBy: {

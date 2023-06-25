@@ -166,7 +166,7 @@ export interface NexusGenFieldTypes {
   Block: { // field return type
     beneficiary: string; // String!
     com: boolean; // Boolean!
-    expendTxs: NexusGenRootTypes['Transaction'][]; // [Transaction!]!
+    expendedTxs: NexusGenRootTypes['Transaction'][]; // [Transaction!]!
     gasLimit: number; // Int!
     gasUsed: number; // Int!
     id: string; // String!
@@ -295,7 +295,7 @@ export interface NexusGenFieldTypeNames {
   Block: { // field return type name
     beneficiary: 'String'
     com: 'Boolean'
-    expendTxs: 'Transaction'
+    expendedTxs: 'Transaction'
     gasLimit: 'Int'
     gasUsed: 'Int'
     id: 'String'

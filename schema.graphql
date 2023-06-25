@@ -5,7 +5,7 @@
 type Block {
   beneficiary: String!
   com: Boolean!
-  expendTxs: [Transaction!]!
+  expendedTxs: [Transaction!]!
   gasLimit: Int!
   gasUsed: Int!
   id: String!

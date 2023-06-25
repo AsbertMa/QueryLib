@@ -20,7 +20,7 @@ export const Block = objectType({
     t.nonNull.boolean('com')
     t.nonNull.boolean('isTrunk')
     t.nonNull.boolean('isFinalized')
-    t.nonNull.list.nonNull.field('expendTxs', {
+    t.nonNull.list.nonNull.field('expendedTxs', {
       type: 'Transaction',
       resolve(block) {
         return block.txs
