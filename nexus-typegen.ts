@@ -48,6 +48,14 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Account: { // root type
+    balance?: string | null; // String
+    code?: string | null; // String
+    deployer?: string | null; // String
+    energy?: string | null; // String
+    master?: string | null; // String
+    sponsor?: string | null; // String
+  }
   Block: { // root type
     beneficiary: string; // String!
     com: boolean; // Boolean!
@@ -163,6 +171,14 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
+  Account: { // field return type
+    balance: string | null; // String
+    code: string | null; // String
+    deployer: string | null; // String
+    energy: string | null; // String
+    master: string | null; // String
+    sponsor: string | null; // String
+  }
   Block: { // field return type
     beneficiary: string; // String!
     com: boolean; // Boolean!
@@ -223,6 +239,7 @@ export interface NexusGenFieldTypes {
     transfers: NexusGenRootTypes['Transfer'][]; // [Transfer!]!
   }
   Query: { // field return type
+    account: NexusGenRootTypes['Account'] | null; // Account
     block: NexusGenRootTypes['Block'] | null; // Block
     blocks: NexusGenRootTypes['Blocks'] | null; // Blocks
     events: NexusGenRootTypes['EventLogs']; // EventLogs!
@@ -292,6 +309,14 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Account: { // field return type name
+    balance: 'String'
+    code: 'String'
+    deployer: 'String'
+    energy: 'String'
+    master: 'String'
+    sponsor: 'String'
+  }
   Block: { // field return type name
     beneficiary: 'String'
     com: 'Boolean'
@@ -352,6 +377,7 @@ export interface NexusGenFieldTypeNames {
     transfers: 'Transfer'
   }
   Query: { // field return type name
+    account: 'Account'
     block: 'Block'
     blocks: 'Blocks'
     events: 'EventLogs'
@@ -422,6 +448,9 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Query: {
+    account: { // args
+      address: string; // String!
+    }
     block: { // args
       id: string; // String!
     }

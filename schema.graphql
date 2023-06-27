@@ -2,6 +2,15 @@
 ### Do not make changes to this file directly
 
 
+type Account {
+  balance: String
+  code: String
+  deployer: String
+  energy: String
+  master: String
+  sponsor: String
+}
+
 type Block {
   beneficiary: String!
   com: Boolean!
@@ -84,6 +93,7 @@ type Outputs {
 }
 
 type Query {
+  account(address: String!): Account
   block(id: String!): Block
   blocks(order: Order = DESC, range: Range, signer: String, skip: Int, take: Int = 10): Blocks
   events(criterias: [EventCriteria], order: Order = DESC, range: Range, skip: Int, take: Int = 10): EventLogs!
