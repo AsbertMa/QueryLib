@@ -3,12 +3,21 @@
 
 
 type Account {
+  authority: Authority
   balance: String
   code: String
   deployer: String
   energy: String
   master: String
   sponsor: String
+}
+
+type Authority {
+  active: Boolean!
+  endorsor: String
+  identity: String
+  listed: Boolean!
+  signedBlockCount: ID!
 }
 
 type Block {

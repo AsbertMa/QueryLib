@@ -49,12 +49,20 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Account: { // root type
+    authority?: NexusGenRootTypes['Authority'] | null; // Authority
     balance?: string | null; // String
     code?: string | null; // String
     deployer?: string | null; // String
     energy?: string | null; // String
     master?: string | null; // String
     sponsor?: string | null; // String
+  }
+  Authority: { // root type
+    active: boolean; // Boolean!
+    endorsor?: string | null; // String
+    identity?: string | null; // String
+    listed: boolean; // Boolean!
+    signedBlockCount: string; // ID!
   }
   Block: { // root type
     beneficiary: string; // String!
@@ -172,12 +180,20 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   Account: { // field return type
+    authority: NexusGenRootTypes['Authority'] | null; // Authority
     balance: string | null; // String
     code: string | null; // String
     deployer: string | null; // String
     energy: string | null; // String
     master: string | null; // String
     sponsor: string | null; // String
+  }
+  Authority: { // field return type
+    active: boolean; // Boolean!
+    endorsor: string | null; // String
+    identity: string | null; // String
+    listed: boolean; // Boolean!
+    signedBlockCount: string; // ID!
   }
   Block: { // field return type
     beneficiary: string; // String!
@@ -310,12 +326,20 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   Account: { // field return type name
+    authority: 'Authority'
     balance: 'String'
     code: 'String'
     deployer: 'String'
     energy: 'String'
     master: 'String'
     sponsor: 'String'
+  }
+  Authority: { // field return type name
+    active: 'Boolean'
+    endorsor: 'String'
+    identity: 'String'
+    listed: 'Boolean'
+    signedBlockCount: 'ID'
   }
   Block: { // field return type name
     beneficiary: 'String'

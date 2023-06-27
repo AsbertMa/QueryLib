@@ -107,8 +107,45 @@ const aibSponsor = {
   "type": "function"
 }
 
+const abiGet = {
+  "constant": true,
+  "inputs": [
+    {
+      "name": "_nodeMaster",
+      "type": "address"
+    }
+  ],
+  "name": "get",
+  "outputs": [
+    {
+      "name": "listed",
+      "type": "bool"
+    },
+    {
+      "name": "endorsor",
+      "type": "address"
+    },
+    {
+      "name": "identity",
+      "type": "bytes32"
+    },
+    {
+      "name": "active",
+      "type": "bool"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}
+
 export const energy = new abi.Function(abiEnergy as abi.Function.Definition)
 export const balance = new abi.Function(abiBalance as abi.Function.Definition)
 export const sponsor = new abi.Function(aibSponsor as abi.Function.Definition)
 export const master = new abi.Function(abiMaster as abi.Function.Definition)
 export const hasCode = new abi.Function(abiHasCode as abi.Function.Definition)
+
+export const auGet = new abi.Function(abiGet as abi.Function.Definition)
+
+export const ADDR_PROTOTYPE = '0x000000000000000000000050726f746f74797065'
+export const ADDR_AUTHORITY = '0x0000000000000000000000417574686f72697479'
