@@ -64,7 +64,7 @@ export const account = extendType({
               }
             }
           })
-          t && t.clause && (deployer = t.clause.tx.origin)
+          t && t.clause && t.clause.tx && (deployer = t.clause.tx.origin!)
         }
 
         if (authorityDecoded.identity !== zeroIdentity && authorityDecoded.endorsor !== zeroAddr) {
@@ -86,7 +86,7 @@ export const account = extendType({
           sponsor: master.decode(resp[4].data)[0],
           deployer,
           authority
-        }
+        } as any
       }
     })
   },

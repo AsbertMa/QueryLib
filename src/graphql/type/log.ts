@@ -8,7 +8,7 @@ export const TrasnferLog = objectType({
     t.nonNull.string('amount')
     t.nonNull.field('meta', {
       type: 'LogMeta',
-      resolve(source) {
+      resolve(source: any) {
         return {
           clauseIndex: source.clause.index,
           blockID: source.clause.tx.block.id,
@@ -27,13 +27,13 @@ export const EventLog = objectType({
   name: 'EventLog',
   definition(t) {
     t.nonNull.string('address', {
-      resolve(s) {
+      resolve(s: any) {
         return s.contractAddr
       }
     })
     t.nonNull.list.nonNull.field('topics', {
       type: 'String',
-      resolve(source) {
+      resolve(source: any) {
         const keys = ['topic0', 'topic1', 'topic2', 'topic3', 'topic4']
         return keys.map(k => source[k]).filter(t => !!t)
       }
@@ -41,7 +41,7 @@ export const EventLog = objectType({
     t.nonNull.string('data')
     t.nonNull.field('meta', {
       type: 'LogMeta',
-      resolve(source) {
+      resolve(source: any) {
         return {
           clauseIndex: source.clause.index,
           blockID: source.clause.tx.block.id,
@@ -62,7 +62,7 @@ export const TransferLogs = objectType({
     t.nonNull.int('count')
     t.nonNull.list.nonNull.field('logs', {
       type: 'TrasnferLog',
-      resolve(s) {
+      resolve(s: any) {
         return s.logs
       }
     })
@@ -75,7 +75,7 @@ export const EventLogs = objectType({
     t.nonNull.int('count'),
     t.nonNull.list.nonNull.field('logs', {
       type: 'EventLog',
-      resolve(s) {
+      resolve(s: any) {
         return s.logs
       }
     })

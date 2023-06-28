@@ -10,7 +10,7 @@ export const Receipt = objectType({
     t.nonNull.boolean('reverted')
     t.nonNull.field('meta', {
       type: 'ReceiptMeta',
-      resolve(infos, _, ctx) {
+      resolve(infos: any, _, ctx) {
         return {
           blockID: infos.blockID,
           blockNumber: infos.block.number,
@@ -23,7 +23,7 @@ export const Receipt = objectType({
     })
     t.nonNull.list.nonNull.field('outputs', {
       type: 'Outputs',
-      async resolve(tx, _, ctx) {
+      async resolve(tx: any, _, ctx) {
         return tx.clauses
       }
     })

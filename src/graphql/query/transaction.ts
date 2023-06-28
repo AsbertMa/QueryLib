@@ -12,8 +12,16 @@ export const txByID = extendType({
         return ctx.prisma.tx.findUnique({
           where: {
             id: id
+          },
+          include: {
+            block: true,
+            clauses: {
+              orderBy: {
+                index: 'asc'
+              }
+            }
           }
-        })
+        }) as any
       }
     })
   }
@@ -63,17 +71,25 @@ export const txList = extendType({
             },
             AND: rangeFilter
           },
-          orderBy: {
-            createdAt: order
+          include: {
+            block: true,
+            clauses: {
+              orderBy: {
+                index: 'asc'
+              }
+            }
           },
-          take,
-          skip
+          orderBy: {
+            createdAt: order!
+          },
+          take: take || undefined,
+          skip: skip || undefined
         })
 
         return {
           count,
           list
-        }
+        } as any
       }
     })
   },

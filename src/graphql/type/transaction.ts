@@ -18,50 +18,26 @@ export const Tx = objectType({
     // Meta
     t.nonNull.field('meta', {
       type: 'TxMeta',
-      resolve(tx, _, ctx) {
-        const blockID = tx.blockID
-        return ctx.prisma.block.findUnique({
-          where: {
-            id: blockID
-          },
-          select: {
-            id: true,
-            number: true,
-            timestamp: true
-          }
-        }).then((b) => {
-          return {
-            blockID: b.id,
-            blockNumber: b.number,
-            blockTimestamp: b.timestamp
-          }
-        })
+      resolve(tx: any, _, ctx) {
+        const block = tx.block
+        return {
+            blockID: block.id,
+            blockNumber: block.number,
+            blockTimestamp: block.timestamp
+        }
       }
     })
     // Clauses
     t.nonNull.list.nonNull.field('clauses', {
       type: 'Clause',
-      resolve(tx, _, ctx) {
-        const id = tx.id
-        return ctx.prisma.clause.findMany({
-          where: {
-            txID: id
-          },
-          select: {
-            to: true,
-            data: true,
-            value: true
-          },
-          orderBy: {
-            index: 'asc'
-          }
-        })
+      resolve(tx: any) {
+        return tx.clauses
       }
     })
     // Receipt
     t.nullable.field('receipt', {
       type: 'Receipt',
-      resolve(tx) {
+      resolve(tx: any) {
         return tx
       }
     })

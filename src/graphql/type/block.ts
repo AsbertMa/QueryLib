@@ -22,14 +22,14 @@ export const Block = objectType({
     t.nonNull.boolean('isFinalized')
     t.nonNull.list.nonNull.field('expendedTxs', {
       type: 'Transaction',
-      resolve(block) {
+      resolve(block: any) {
         return block.txs
       }
     })
     t.nonNull.list.nonNull.field('transactions', {
       type: 'String',
-      resolve(block) {
-        return block.txs.map(t => {
+      resolve(block: any) {
+        return block.txs.map((t: any) => {
           return t.id
         })
 

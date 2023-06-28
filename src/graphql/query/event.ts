@@ -35,17 +35,17 @@ export const events = extendType({
           }
         } : undefined
         const queryObj = criterias?.map(c => {
-          let result: Record<string, string> = {}
+          let result: Record<string, { equals: string }> = {}
 
-          c?.address && (result['contractAddr'] = c?.address)
-          c?.topic0 && (result['topic0'] = c?.topic0)
-          c?.topic1 && (result['topic1'] = c?.topic1)
-          c?.topic2 && (result['topic2'] = c?.topic2)
-          c?.topic3 && (result['topic3'] = c?.topic3)
-          c?.topic4 && (result['topic4'] = c?.topic4)
-          
-          return Object.keys(result).length ? result : null
-        }).filter(item => !!item)
+          c?.address && (result['contractAddr']['equals'] = c?.address)
+          c?.topic0 && (result['topic0']['equals'] = c?.topic0)
+          c?.topic1 && (result['topic1']['equals'] = c?.topic1)
+          c?.topic2 && (result['topic2']['equals'] = c?.topic2)
+          c?.topic3 && (result['topic3']['equals'] = c?.topic3)
+          c?.topic4 && (result['topic4']['equals'] = c?.topic4)
+
+          return result
+        }).filter(item => !!Object.keys(item).length)
 
         const count = await ctx.prisma.event.count({
           where: {
@@ -86,10 +86,10 @@ export const events = extendType({
             }
           },
           orderBy: {
-            createdAt: order
+            createdAt: order!
           },
-          skip,
-          take
+          skip: skip!,
+          take: take!
         })
         return {
           count,

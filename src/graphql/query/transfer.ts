@@ -40,8 +40,8 @@ export const transfers = extendType({
           c?.recipient && (result['recipient'] = c.recipient)
           c?.sender && (result['sender'] = c.sender)
 
-          return Object.keys(result).length ? result : null
-        }).filter(item => !!item)
+          return result
+        }).filter(item => !! Object.keys(item).length)
 
         const count = await ctx.prisma.transfer.count({
           where: {
@@ -80,10 +80,10 @@ export const transfers = extendType({
             }
           },
           orderBy: {
-            createdAt: order
+            createdAt: order!
           },
-          take,
-          skip
+          take: take!,
+          skip: skip!
         })
 
         return {

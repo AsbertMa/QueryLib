@@ -1,6 +1,6 @@
 import { arg, extendType, intArg, nonNull, stringArg } from "nexus"
 import {getBlockNum} from '../../utils'
-import { Order } from "../type"
+import { Order, Block } from "../type"
 export const blockById = extendType({
   type: 'Query',
   definition(t) {
@@ -35,12 +35,11 @@ export const blockById = extendType({
             }
           }
         })
-        console.log(JSON.stringify(theB))
 
         return {
           ...theB,
           isFinalized: theB?.number! < finalizedNum
-        }
+        } as any
       }
     })
   }
@@ -105,10 +104,10 @@ export const blocks = extendType({
             }
           },
           orderBy: {
-            number: order
+            number: order!
           },
-          take,
-          skip
+          take: take!,
+          skip: skip!
         })
 
         return {
@@ -117,7 +116,7 @@ export const blocks = extendType({
             return {
               ...b,
               isFinalized: b?.number! < finalizedNum
-            }
+            } as any
           })
         }
       }

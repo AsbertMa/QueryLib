@@ -23,7 +23,7 @@ export const receiptByTxID = extendType({
             },
             block: true
           }
-        })
+        }) as any
       }
     })
   }
