@@ -1,6 +1,7 @@
 import { arg, extendType, intArg, nonNull, stringArg } from "nexus"
 import {getBlockNum} from '../../utils'
 import { Order, Block } from "../type"
+import { Prisma } from "@prisma/client"
 export const blockById = extendType({
   type: 'Query',
   definition(t) {
@@ -70,45 +71,50 @@ export const blocks = extendType({
             lte: range.to
           }
         } : undefined
-        const count = await ctx.prisma.block.count({
-          where: {
-            signer,
-            isTrunk: true,
-            AND: rangeFilter
-          }
+
+        const [count, finalized, list] = await ctx.prisma.$transaction([
+          ctx.prisma.block.count({
+            where: {
+              signer,
+              isTrunk: true,
+              AND: rangeFilter
+            }
+          }),
+          ctx.prisma.status.findUnique({
+            where: {
+              key: 'finalized'
+            }
+          }),
+          ctx.prisma.block.findMany({
+            where: {
+              signer,
+              isTrunk: true,
+              AND: rangeFilter
+            },
+            include: {
+              txs: {
+                include: {
+                  clauses: {
+                    include: {
+                      transfers: true,
+                      events: true,
+                      contractCreate: true
+                    }
+                  },
+                }
+              }
+            },
+            orderBy: {
+              number: order!
+            },
+            take: take!,
+            skip: skip!
+          })
+        ], {
+          isolationLevel: Prisma.TransactionIsolationLevel.Serializable
         })
 
-        const finalized = await ctx.prisma.status.findUnique({
-          where: {
-            key: 'finalized'
-          }
-        })
         const finalizedNum = getBlockNum(finalized?.value!)
-        const list = await ctx.prisma.block.findMany({
-          where: {
-            signer,
-            isTrunk: true,
-            AND: rangeFilter
-          },
-          include: {
-            txs: {
-              include: {
-                clauses: {
-                  include: {
-                    transfers: true,
-                    events: true,
-                    contractCreate: true
-                  }
-                },
-              }
-            }
-          },
-          orderBy: {
-            number: order!
-          },
-          take: take!,
-          skip: skip!
-        })
 
         return {
           count,

@@ -1,4 +1,6 @@
 import { extendType, intArg, nonNull, stringArg, arg } from "nexus"
+import { Prisma } from "@prisma/client"
+
 export const txByID = extendType({
   type: 'Query',
   definition(t) {
@@ -54,36 +56,40 @@ export const txList = extendType({
             }
           }
         } : undefined
-        const count = await ctx.prisma.tx.count({
-          where: {
-            origin,
-            block: {
-              isTrunk: true
-            },
-            AND: rangeFilter
-          }
-        })
-        const list = await ctx.prisma.tx.findMany({
-          where: {
-            origin,
-            block: {
-              isTrunk: true
-            },
-            AND: rangeFilter
-          },
-          include: {
-            block: true,
-            clauses: {
-              orderBy: {
-                index: 'asc'
-              }
+        const [count, list] = await ctx.prisma.$transaction([
+          ctx.prisma.tx.count({
+            where: {
+              origin,
+              block: {
+                isTrunk: true
+              },
+              AND: rangeFilter
             }
-          },
-          orderBy: {
-            createdAt: order!
-          },
-          take: take || undefined,
-          skip: skip || undefined
+          }),
+          ctx.prisma.tx.findMany({
+            where: {
+              origin,
+              block: {
+                isTrunk: true
+              },
+              AND: rangeFilter
+            },
+            include: {
+              block: true,
+              clauses: {
+                orderBy: {
+                  index: 'asc'
+                }
+              }
+            },
+            orderBy: {
+              createdAt: order!
+            },
+            take: take || undefined,
+            skip: skip || undefined
+          })
+        ], {
+          isolationLevel: Prisma.TransactionIsolationLevel.Serializable
         })
 
         return {

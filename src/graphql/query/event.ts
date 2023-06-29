@@ -1,6 +1,6 @@
 import { extendType, nullable, arg, list, intArg } from "nexus"
 import { Order, Range } from "../type"
-
+import { Prisma } from "@prisma/client"
 export const events = extendType({
   type: 'Query',
   definition(t) {
@@ -47,49 +47,53 @@ export const events = extendType({
           return result
         }).filter(item => !!Object.keys(item).length)
 
-        const count = await ctx.prisma.event.count({
-          where: {
-            OR: queryObj,
-            AND: rangeFilter
-          }
-        })
-        const logs = await ctx.prisma.event.findMany({
-          where: {
-            OR: queryObj,
-            AND: rangeFilter
-          },
-          select: {
-            contractAddr: true,
-            data: true,
-            topic0: true,
-            topic1: true,
-            topic2: true,
-            topic3: true,
-            clause: {
-              select: {
-                index: true,
-                tx: {
-                  select: {
-                    id: true,
-                    index: true,
-                    origin: true,
-                    block: {
-                      select: {
-                        id: true,
-                        number: true,
-                        timestamp: true
+        const [count, logs] = await ctx.prisma.$transaction([
+          ctx.prisma.event.count({
+            where: {
+              OR: queryObj,
+              AND: rangeFilter
+            }
+          }),
+          ctx.prisma.event.findMany({
+            where: {
+              OR: queryObj,
+              AND: rangeFilter
+            },
+            select: {
+              contractAddr: true,
+              data: true,
+              topic0: true,
+              topic1: true,
+              topic2: true,
+              topic3: true,
+              clause: {
+                select: {
+                  index: true,
+                  tx: {
+                    select: {
+                      id: true,
+                      index: true,
+                      origin: true,
+                      block: {
+                        select: {
+                          id: true,
+                          number: true,
+                          timestamp: true
+                        }
                       }
                     }
                   }
                 }
               }
-            }
-          },
-          orderBy: {
-            createdAt: order!
-          },
-          skip: skip!,
-          take: take!
+            },
+            orderBy: {
+              createdAt: order!
+            },
+            skip: skip!,
+            take: take!
+          })
+        ], {
+          isolationLevel: Prisma.TransactionIsolationLevel.Serializable
         })
         return {
           count,
