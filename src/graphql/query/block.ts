@@ -78,7 +78,8 @@ export const blocks = extendType({
               signer,
               isTrunk: true,
               AND: rangeFilter
-            }
+            },
+            distinct: ['id']
           }),
           ctx.prisma.status.findUnique({
             where: {

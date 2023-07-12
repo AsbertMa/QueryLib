@@ -52,7 +52,8 @@ export const events = extendType({
             where: {
               OR: queryObj,
               AND: rangeFilter
-            }
+            },
+            distinct: ['id']
           }),
           ctx.prisma.event.findMany({
             where: {

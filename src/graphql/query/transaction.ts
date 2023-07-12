@@ -64,7 +64,8 @@ export const txList = extendType({
                 isTrunk: true
               },
               AND: rangeFilter
-            }
+            },
+            distinct: ['id']
           }),
           ctx.prisma.tx.findMany({
             where: {
