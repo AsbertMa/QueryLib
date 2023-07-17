@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model status {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  key       String?  @db.VarChar(255) @unique
+  value     String?  @db.VarChar(255)
+}
+
+model block {
+  id           String   @id @db.VarChar(255)
+  number       Int?
+  beneficiary  String?  @db.VarChar(255)
+  txs          tx[]
+  gasLimit     Int?
+  gasUsed      Int?
+  com          Boolean?
+  isTrunk      Boolean?
+  parentID     String?  @db.VarChar(255)
+  receiptsRoot String?  @db.VarChar(255)
+  signer       String?  @db.VarChar(255)
+  size         Int?
+  stateRoot    String?  @db.VarChar(255)
+  timestamp    Int?
+  totalScore   Int?
+  txsFeatures  Int?
+  txsRoot      String?  @db.VarChar(255)
+  createdAt    DateTime @db.DateTime(0)
+  updatedAt    DateTime @db.DateTime(0)
+}
+
+model clause {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  tx        tx?       @relation(fields: [txID], references: [id])
+  txID      String?  @db.VarChar(255)
+  events    event[]
+  transfers transfer[]
+  contractCreate contractCreation?
+  index     Int?
+  to        String?  @db.VarChar(255)
+  data      String?  @db.Text
+  value     String?  @db.VarChar(255)
+  createdAt DateTime @db.DateTime(0)
+  updatedAt DateTime @db.DateTime(0)
+}
+
+model contractCreation {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  clause       clause?   @relation(fields: [clauseID], references: [id])
+  clauseID  Int?     @unique
+  address   String   @db.VarChar(255)
+  createdAt DateTime @db.DateTime(0)
+  updatedAt DateTime @db.DateTime(0)
+}
+
+model event {
+  id           Int      @id @default(autoincrement()) @db.UnsignedInt
+  clause       clause?   @relation(fields: [clauseID], references: [id])
+  clauseID     Int?
+  index        Int?
+  contractAddr String?  @db.VarChar(255)
+  topic0       String   @db.VarChar(255)
+  topic1       String?  @db.VarChar(255)
+  topic2       String?  @db.VarChar(255)
+  topic3       String?  @db.VarChar(255)
+  topic4       String?  @db.VarChar(255)
+  data         String?  @db.Text
+  createdAt    DateTime @db.DateTime(0)
+  updatedAt    DateTime @db.DateTime(0)
+}
+
+model transfer {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  clause       clause?   @relation(fields: [clauseID], references: [id])
+  clauseID  Int?
+  index     Int?
+  sender    String   @db.VarChar(255)
+  recipient String   @db.VarChar(255)
+  amount    String   @db.VarChar(255)
+  createdAt DateTime @db.DateTime(0)
+  updatedAt DateTime @db.DateTime(0)
+}
+
+model tx {
+  id           String   @id @db.VarChar(255)
+  index        Int?
+  block        block?    @relation(fields: [blockID], references: [id])
+  clauses      clause[]
+  blockID      String?  @db.VarChar(255)
+  chainTag     Int?
+  blockRef     String?  @db.VarChar(255)
+  expiration   Int?     @db.UnsignedInt
+  gasPriceCoef Int?
+  gas          Int?
+  origin       String?  @db.VarChar(255)
+  delegator    String?  @db.VarChar(255)
+  nonce        String?  @db.VarChar(255)
+  dependsOn    String?  @db.VarChar(255)
+  size         Int?
+  gasUsed      Int?
+  gasPayer     String?  @db.VarChar(255)
+  paid         String?  @db.VarChar(255)
+  reward       String?  @db.VarChar(255)
+  reverted     Boolean?
+  createdAt    DateTime @db.DateTime(0)
+  updatedAt    DateTime @db.DateTime(0)
+}
