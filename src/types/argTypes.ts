@@ -1,4 +1,4 @@
-import { GraphQLInputObjectType, GraphQLEnumType, GraphQLNonNull, GraphQLString } from 'graphql'
+import { GraphQLInputObjectType, GraphQLEnumType, GraphQLNonNull, GraphQLString, GraphQLInt } from 'graphql'
 
 export const Unit = new GraphQLEnumType({
   name: 'Unit',
@@ -60,7 +60,13 @@ export const Range = new GraphQLInputObjectType({
   fields: {
     unit:{
       type: new GraphQLNonNull(Unit)
-    }
+    },
+    from: {
+      type: GraphQLInt
+    },
+    to: {
+      type: GraphQLInt
+    },
   }
 })
 
