@@ -2,7 +2,7 @@ import { createYoga, createSchema } from 'graphql-yoga'
 import { GLContext } from './context'
 import { GraphQLSchema } from 'graphql'
 
-export function createEndpoint(name: string, schema: GraphQLSchema, ctx: GLContext) {
+export function createEndpoint(name: string, schema: GraphQLSchema, ctx?: GLContext) {
   const graphQLServer = createYoga({
     graphqlEndpoint: '/' + name,
     schema: createSchema<GLContext>({

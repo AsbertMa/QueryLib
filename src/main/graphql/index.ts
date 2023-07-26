@@ -4,6 +4,7 @@ import * as event from './event'
 import * as receipt from './receipt'
 import * as tx from './transaction'
 import * as transfers from './transfer'
+import * as account from './buildin/account'
 
 export default new GraphQLObjectType({
   name: 'Query',
@@ -12,6 +13,7 @@ export default new GraphQLObjectType({
     ...event,
     ...receipt,
     ...tx,
-    ...transfers
+    ...transfers,
+    ...account
   }
 })
