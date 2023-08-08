@@ -1,0 +1,44 @@
+import { GraphQLInt, GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLList, GraphQLInputObjectType } from 'graphql'
+
+<% abis.forEach((item) => { %>
+export const <%= item.name %> = new GraphQLObjectType({
+  name: '<%= item.name %>',
+  fields: {
+  <% item.inputs.forEach((input, index) => { %>
+      <%= input.name %>: {
+        type: GraphQLString
+        },<% }) %>
+  }
+})
+
+<%if (item.inputs.filter(i => i.indexed).length > 0) {%>
+
+export const <%= item.name %>_args = new GraphQLInputObjectType({
+  name: '<%= item.name %>_args',
+  fields: {
+  <% item.inputs.filter(i => i.indexed).forEach((input, index) => { %>
+      <%= input.name %>: {
+        type: <% if(input.type.includes('uint')) {%>
+            GraphQLInt
+          <%}%>
+          <% if(!input.type.includes('uint')) { %>
+            GraphQLString
+          <%} %>
+        },<% }) %>
+  }
+})
+
+<%}%>
+
+export const <%= item.name %>List = new GraphQLObjectType({
+  name: '<%= item.name %>List',
+  fields: {
+    count: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
+    list: {
+      type: new GraphQLNonNull(new GraphQLList(<%= item.name %>))
+    }
+  }
+})
+<% }) %>

@@ -10,6 +10,8 @@ export function createEndpoint(name: string, schema: GraphQLSchema, ctx?: GLCont
     }),
     context: ctx,
     logging: true,
+    landingPage: false,
+    graphiql: false
   })
 
   return graphQLServer

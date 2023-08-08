@@ -1,0 +1,54 @@
+import { GraphQLFieldConfig, GraphQLInt } from 'graphql'
+import { Order, Range } from '../../types'
+import BaseEvent from '../../converter/event'
+import {
+  <% abis.forEach((item) => { %>
+    <%if (item.inputs.filter(i => i.indexed).length > 0) {%>
+      <%= item.name %>_args,
+    <%}%>
+    <%= item.name %>List,
+  <% }) %>
+} from './types'
+import { abi } from "thor-devkit"
+import abis from './abi'
+
+const _baseEvent = new BaseEvent('<%= address %>', abis.filter(item => item.type === 'event') as abi.Event.Definition[])
+const baseArgs = {
+  range: {
+    type: Range
+  },
+  order: {
+    type: Order,
+    defaultValue: Order.getValue('DESC').value
+  },
+  skip: {
+    type: GraphQLInt
+  },
+  take: {
+    type: GraphQLInt,
+    defaultValue: 10
+  }
+}
+
+<% abis.forEach((item) => { %>
+  <% const hasCriteria = item.inputs.filter(i => i.indexed).length > 0 %>
+  export const <%= item.name %>Logs: GraphQLFieldConfig<any, any, any> = {
+    type: <%= item.name %>List,
+    args: {
+      <%if (hasCriteria) {%>
+      criteria: {
+        type: <%= item.name %>_args
+      },
+      <%}%>
+      ...baseArgs
+    },
+    resolve: async (source, { criteria, range, order, skip, take }, { prisma }) => {
+      const count = await _baseEvent.count('<%=item.name%>', criteria, range, prisma)
+      const list = await _baseEvent.query('<%=item.name%>', criteria, range, skip, take, order, prisma)
+      return {
+        count: count,
+        list: list
+      }
+    }
+  }
+<% }) %>

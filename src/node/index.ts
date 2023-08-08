@@ -7,6 +7,6 @@ const schema = new GraphQLSchema({
   query: q
 })
 
-const mainSvc = createEndpoint('main', schema, context)
+const mainSvc = createEndpoint('node', schema, context)
 
 export default mainSvc

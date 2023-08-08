@@ -68,6 +68,7 @@ export const events: GraphQLFieldConfig<any, any, any> = {
           topic1: true,
           topic2: true,
           topic3: true,
+          topic4: true,
           clause: {
             select: {
               index: true,

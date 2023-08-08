@@ -1,27 +1,22 @@
-import { GraphQLObjectType, GraphQLFieldConfig, GraphQLString, GraphQLSchema } from 'graphql'
-import {createEndpoint} from './utils'
+// import { GraphQLSchema } from 'graphql'
+// import test from './apps/test'
+// import { createEndpoint } from './utils'
+// import { context } from './context'
 
-function createQuery(name: string): GraphQLFieldConfig<any, any, any> {
-  return {
-    type: GraphQLString,
-    resolve: () => {
-      return name
-    }
-  }
-}
 
-export default function createEnd(name: string) {
-  const f = createQuery(name)
-  const s =  new GraphQLObjectType ({
-    name: name,
-    fields: {
-      f
-    }
-  })
+// export default function createEnd(name: string) {
+//   return createEndpoint(name, new GraphQLSchema({
+//     query: test
+//   }), context)
+// }
+// import { Router } from 'express'
+// import appCode from './codeGen'
 
-  return createEndpoint(name, new GraphQLSchema({
-    query: s
-  }))
-}
+// const createGraphql = Router()
+// createGraphql.get('/create', (req, resp, next) => {
+//   next()
+// })
 
- 
+// createGraphql.post('/create', (req, resp, next) => {
+//   next()
+// })
