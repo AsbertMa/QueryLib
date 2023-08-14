@@ -1,6 +1,7 @@
 import { createYoga, createSchema } from 'graphql-yoga'
 import { GLContext } from './context'
 import { GraphQLSchema } from 'graphql'
+import {} from 'thor-devkit'
 
 export function createEndpoint(name: string, schema: GraphQLSchema, ctx?: GLContext) {
   const graphQLServer = createYoga({
@@ -9,9 +10,7 @@ export function createEndpoint(name: string, schema: GraphQLSchema, ctx?: GLCont
       typeDefs: schema
     }),
     context: ctx,
-    logging: true,
-    landingPage: false,
-    graphiql: false
+    logging: true
   })
 
   return graphQLServer

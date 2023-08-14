@@ -39,14 +39,14 @@ export default class BaseEvent {
         equals: this.address
       }
     }
-    if (filter) {
-      const decode = event.encode(filter)
-      decode.forEach((item, index) => {
-        if (item) {
-          result[`topic${index}`]['equals'] = item
-        }
-      })
-    }
+
+    const encoded = event.encode(filter || {})
+    encoded.forEach((item, index) => {
+      if (item) {
+        result[`topic${index}`] = {}
+        result[`topic${index}`]['equals'] = item
+      }
+    })
 
     return result
   }
@@ -59,6 +59,7 @@ export default class BaseEvent {
         AND: [rangeFilter, ff],
       },
       select: {
+        id: true,
         contractAddr: true,
         data: true,
         topic0: true,
@@ -77,12 +78,12 @@ export default class BaseEvent {
     const ev = new abi.Event(eventAbi)
     return temp.map(item => {
       return ev.decode(item.data, [
-        item.topic0,
-        item.topic1,
-        item.topic2,
-        item.topic3,
-        item.topic4
-      ].filter(i => i))
+          item.topic0,
+          item.topic1,
+          item.topic2,
+          item.topic3,
+          item.topic4
+        ].filter(i => i))
     })
   }
   public count (eventName: string, filter: Record<string, string>, range: Range, dbIndtance) {

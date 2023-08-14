@@ -6,39 +6,77 @@ import { getBlockNum } from '../../utils'
 export const block: GraphQLFieldConfig<any, any, any> = {
   type: Block,
   args: {
-    id: {
-      type: GraphQLString
+    revision: {
+      type: GraphQLString,
+      description: `block ID or number, or 'best' stands for latest block, or 'finalized' stands for finalized block`
     }
   },
-  resolve: async (source, { id }, { prisma }) => {
+  resolve: async (source, { revision }, { prisma }) => {
     const finalized = await prisma.status.findUnique({
       where: {
         key: 'finalized'
       }
     })
     const finalizedNum = getBlockNum(finalized?.value!)
-    const theB = await prisma.block.findUnique({
-      where: {
-        id: id
-      },
-      include: {
-        txs: {
-          include: {
-            block: true,
-            clauses: {
-              orderBy: {
-                index: Prisma.SortOrder.asc
-              },
-              include: {
-                transfers: true,
-                events: true,
-                contractCreate: true
-              }
+    const include = {
+      txs: {
+        include: {
+          block: true,
+          clauses: {
+            orderBy: {
+              index: Prisma.SortOrder.asc
             },
-          }
+            include: {
+              transfers: true,
+              events: true,
+              contractCreate: true
+            }
+          },
         }
       }
-    })
+    }
+    let theB
+    switch (revision) {
+      case 'best':
+        theB = await prisma.block.findFirst({
+          include,
+          orderBy: { number: Prisma.SortOrder.desc }
+        })
+        break;
+      case 'finalized':
+        theB = await prisma.block.findUnique({
+          where: {
+            id: finalized.value,
+            isTrunk: true
+          },
+          include
+        })
+        break;
+      default:
+        if (revision.length === 66 || revision.length === 64) {
+          let temp
+          revision.length === 64 ? (temp = revision) : (revision.startsWith('0x') && (temp = revision.slice(2)))
+          const hexChars = /^[0-9a-fA-F]+$/
+          if (hexChars.test(temp)) {
+            theB = prisma.block.findUnique({
+              where: {
+                id: '0x' + temp
+              },
+              include
+            })
+          }
+        } else {
+          const temp = parseInt(revision)
+          theB = prisma.block.findFirst({
+            where: {
+              number: temp,
+              isTrunk: true
+            },
+            include
+          })
+        }
+        break;
+    }
 
     return {
       ...theB,

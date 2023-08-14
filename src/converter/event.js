@@ -65,14 +65,13 @@ var BaseEvent = /** @class */ (function () {
                 equals: this.address
             }
         };
-        if (filter) {
-            var decode = event.encode(filter);
-            decode.forEach(function (item, index) {
-                if (item) {
-                    result["topic".concat(index)]['equals'] = item;
-                }
-            });
-        }
+        var encoded = event.encode(filter || {});
+        encoded.forEach(function (item, index) {
+            if (item) {
+                result["topic".concat(index)] = {};
+                result["topic".concat(index)]['equals'] = item;
+            }
+        });
         return result;
     };
     BaseEvent.prototype.query = function (eventName, filter, range, skip, take, order, dbIndtance) {
@@ -90,6 +89,7 @@ var BaseEvent = /** @class */ (function () {
                                     AND: [rangeFilter, ff],
                                 },
                                 select: {
+                                    id: true,
                                     contractAddr: true,
                                     data: true,
                                     topic0: true,
