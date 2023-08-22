@@ -10,7 +10,7 @@ const crateApp: GraphQLFieldConfig<any, any, any> = {
     address: { type: GraphQLString },
     abi: { type: GraphQLString }
   },
-  async resolve(s, { name, address, abi }, { app }) {
+  async resolve(s, { name, address, abi }, { app, request }) {
     await appCode(name, JSON.parse(abi), address)
     const q = require(`../../apps/${name}/query.js`)
     const queryObj = new GraphQLObjectType({
@@ -22,7 +22,7 @@ const crateApp: GraphQLFieldConfig<any, any, any> = {
 
     const endpoint = createEndpoint(name, new GraphQLSchema({query: queryObj}), context)
     app.use(endpoint.graphqlEndpoint, endpoint)
-    return 'success'
+    return `Create successed, explore the endpoint at ${request.headers.origin}/${name}`
   }
 }
 
@@ -48,6 +48,3 @@ const h = new GraphQLObjectType({
 })
 
 export default new GraphQLSchema({ mutation: add, query: h })
-
-
-// export default createEndpoint('manage', new GraphQLSchema({ mutation: add, query: h }))
