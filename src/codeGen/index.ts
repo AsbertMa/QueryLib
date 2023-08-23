@@ -4,9 +4,11 @@ import { mkdir, access } from 'fs/promises'
 import { abi } from "thor-devkit"
 import { exec } from 'child_process'
 
+const tscPath = path.join(__dirname, '../../node_modules/.bin/tsc')
+
 async function execTsc(file: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    exec(`tsc ${file}`, (err, stdout, stderr) => {
+    exec(`${tscPath} ${file}`, (err, stdout, stderr) => {
       if(stderr) {
         reject(err)
       } else {

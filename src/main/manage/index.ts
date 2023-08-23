@@ -22,7 +22,7 @@ const crateApp: GraphQLFieldConfig<any, any, any> = {
 
     const endpoint = createEndpoint(name, new GraphQLSchema({query: queryObj}), context)
     app.use(endpoint.graphqlEndpoint, endpoint)
-    return `Create successed, explore the endpoint at ${request.headers.origin}/${name}`
+    return `Create successed, explore the endpoint at ${request.headers.get('origin')}/${name}`
   }
 }
 
