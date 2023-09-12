@@ -24,7 +24,7 @@ function loadEndpoints() {
   const appsFolder = Path.join(__dirname, '../apps')
   readdir(appsFolder, (err, paths) => {
     paths.forEach((p, index) => {
-      if (p !== 'index.ts') {
+      if (!(p.includes('.js') || p.includes('.ts'))) {
         const ep = require(`../apps/${p}/query.js`)
         const queryObj = new GraphQLObjectType({
           name: 'Query',
