@@ -5,7 +5,7 @@ import { GraphQLObjectType, GraphQLSchema } from 'graphql'
 import { createEndpoint } from '../utils'
 import { context } from '../context'
 import Path from 'path'
-import { readdir } from 'fs';
+import { readdir, stat } from 'fs';
 
 const app = express()
 
@@ -24,18 +24,23 @@ function loadEndpoints() {
   const appsFolder = Path.join(__dirname, '../apps')
   readdir(appsFolder, (err, paths) => {
     paths.forEach((p, index) => {
-      if (!(p.includes('.js') || p.includes('.ts'))) {
-        const ep = require(`../apps/${p}/query.js`)
-        const queryObj = new GraphQLObjectType({
-          name: 'Query',
-          fields: {
-            ...ep
-          }
-        })
-    
-        const endpoint = createEndpoint(p, new GraphQLSchema({query: queryObj}), context)
-        app.use(endpoint.graphqlEndpoint, endpoint)
-      }
+      stat(`${appsFolder}/${p}`, (err, stats) => {
+        if (stats.isDirectory()) {
+          const ep = require(`../apps/${p}/query.js`)
+          const queryObj = new GraphQLObjectType({
+            name: 'Query',
+            fields: {
+              ...ep
+            }
+          })
+      
+          const endpoint = createEndpoint(p, new GraphQLSchema({query: queryObj}), context)
+          app.use(endpoint.graphqlEndpoint, endpoint)
+        }
+      })
+      // if (!(p.includes('.js') || p.includes('.ts'))) {
+        
+      // }
     })
   })
 }
