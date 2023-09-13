@@ -20,31 +20,4 @@ const main = createYoga({
 
 app.use(main.graphqlEndpoint, main)
 
-function loadEndpoints() {
-  const appsFolder = Path.join(__dirname, '../apps')
-  readdir(appsFolder, (err, paths) => {
-    paths.forEach((p, index) => {
-      stat(`${appsFolder}/${p}`, (err, stats) => {
-        if (stats.isDirectory()) {
-          const ep = require(`../apps/${p}/query.js`)
-          const queryObj = new GraphQLObjectType({
-            name: 'Query',
-            fields: {
-              ...ep
-            }
-          })
-      
-          const endpoint = createEndpoint(p, new GraphQLSchema({query: queryObj}), context)
-          app.use(endpoint.graphqlEndpoint, endpoint)
-        }
-      })
-      // if (!(p.includes('.js') || p.includes('.ts'))) {
-        
-      // }
-    })
-  })
-}
-
-loadEndpoints()
-
 export default app
