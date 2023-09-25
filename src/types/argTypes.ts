@@ -70,3 +70,21 @@ export const Range = new GraphQLInputObjectType({
   }
 })
 
+export const Contract = new GraphQLInputObjectType({
+  name: 'Contract',
+  fields: {
+    name: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: "The contract name"
+    },
+    address: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: "The contract address"
+    },
+    abi: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: "The contract abi json string"
+    }
+  }
+})
+
