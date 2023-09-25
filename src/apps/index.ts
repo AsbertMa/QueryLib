@@ -12,7 +12,7 @@ export default function loadEndpoints(app: Express) {
     paths.forEach((p, index) => {
       stat(`${appsFolder}/${p}`, (err, stats) => {
         if (stats.isDirectory()) {
-          const ep = require(`./${p}/query.js`)
+          const ep = require(`./${p}/index.js`)
           const queryObj = new GraphQLObjectType({
             name: 'Query',
             fields: {

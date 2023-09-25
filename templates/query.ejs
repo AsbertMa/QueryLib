@@ -8,9 +8,9 @@ import {
     <%}%>
     <%= item.name %>List,
   <% }) %>
-} from './types'
+} from './<%= name %>.types'
 import { abi } from "thor-devkit"
-import abis from './abi'
+import abis from './<%= name %>.abi'
 
 const _baseEvent = new BaseEvent('<%= address %>', abis.filter(item => item.type === 'event') as abi.Event.Definition[])
 const baseArgs = {

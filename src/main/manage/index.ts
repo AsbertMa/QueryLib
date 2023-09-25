@@ -1,18 +1,23 @@
-import { GraphQLObjectType, GraphQLString, GraphQLFieldConfig, GraphQLSchema } from 'graphql'
+import { GraphQLObjectType, GraphQLString, GraphQLFieldConfig, GraphQLSchema, GraphQLList } from 'graphql'
 import { createEndpoint } from '../../utils'
 import appCode from '../../codeGen'
 import { context } from '../../context'
+import { Contract } from '../../types'
 
-const crateApp: GraphQLFieldConfig<any, any, any> = {
+const crateProject: GraphQLFieldConfig<any, any, any> = {
   type: GraphQLString,
   args: {
-    name: { type: GraphQLString },
-    address: { type: GraphQLString },
-    abi: { type: GraphQLString }
+    name: {
+      type: GraphQLString
+    },
+    abis: {
+      type: new GraphQLList(Contract)
+    }
   },
-  async resolve(s, { name, address, abi }, { app, request }) {
-    await appCode(name, JSON.parse(abi), address)
-    const q = require(`../../apps/${name}/query.js`)
+  async resolve(s, { name, abis }, { app, request }) {
+    console.log(name, abis)
+    await appCode(name, abis)
+    const q = require(`../../apps/${name}/index.js`)
     const queryObj = new GraphQLObjectType({
       name: 'Query',
       fields: {
@@ -36,7 +41,7 @@ const hello: GraphQLFieldConfig<any, any, any> = {
 const add = new GraphQLObjectType({
   name: 'manage',
   fields: {
-    crateApp
+    crateProject
   }
 })
 
